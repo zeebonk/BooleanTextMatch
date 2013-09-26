@@ -15,7 +15,7 @@ namespace BooleanTextSearch.Interpretation
             new LexRule(@"^AND", TokenType.And),
             new LexRule(@"^OR", TokenType.Or),
             new LexRule(@"^NOT", TokenType.Not),
-            new LexRule(@"^'([^']+)'", TokenType.Literal),
+            new LexRule(@"^'((?:[^'\\]|\\.)+)'", TokenType.Literal),
             new LexRule(@"^[\r\t\n ]+", TokenType.Whitespace),
         };
 
@@ -37,7 +37,7 @@ namespace BooleanTextSearch.Interpretation
 
                 var token = new Token() { Type = matchRule.ResultType, Index = currentCharacterIndex };
                 if (matchResult.Groups.Count >= 2) // Groups[0] is the entire match, Groups[1] is the first real group
-                    token.Value = matchResult.Groups[1].Value;
+                    token.Value = matchResult.Groups[1].Value.Replace(@"\'", "'");
 
                 yield return token;
 

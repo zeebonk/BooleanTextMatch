@@ -10,7 +10,7 @@ namespace BooleanTextSearch.Interpretation
     {
         public LexRule(string regex, TokenType type)
         {
-            Regex = new Regex(regex);
+            Regex = new Regex(regex, RegexOptions.Compiled);
             ResultType = type;
         }
 
