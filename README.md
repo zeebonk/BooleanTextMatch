@@ -1,7 +1,7 @@
 BooleanTextSearch
 =================
 
-A .NET library for text matching using a SQL like syntax.
+A .NET library for text searching/matching using a SQL like syntax with boolean operators.
 
 
 Examples
@@ -13,22 +13,35 @@ A simple query:
 
 	var matcher = BooleanTextSearchFactory.New(query);
 
-	Console.WriteLine(matcher("test riktost tast tust tist")); // False
-	Console.WriteLine(matcher("test teost tast foo tust tist")); // False
-	Console.WriteLine(matcher("test bartost tast foo tist")); // True
-	Console.WriteLine(matcher("test tostbaz tast foo tustqux tist")); // True
+	// False
+	Console.WriteLine(matcher("test tost tast tust tist")); 
+	// False
+	Console.WriteLine(matcher("test tost tast foo tust tist"));
+	// True
+	Console.WriteLine(matcher("test bartost tast foo tist")); 
+	// True
+	Console.WriteLine(matcher("test tostbaz tast foo tustqux tist")); 
 
 Invalid chracters:
 
-	var query = "('foo' crash AND 'bar') OR ('baz' AND 'qux')";
+	var query = "('foo' fail AND 'bar') OR ('baz' AND 'qux')";
 
-	var matcher = BooleanTextSearchFactory.New(query); // throws UnexpectedCharacterException("Unexpected character at 7");
+	// Throws UnexpectedCharacterException("Unexpected character 'f' at position '7'")
+	var matcher = BooleanTextSearchFactory.New(query); 
 
 Invalid syntax:
 
 	var query = "('foo' AND 'bar') OR AND ('baz' AND 'qux')";
 
-	var matcher = BooleanTextSearchFactory.New(query); // throws UnexpectedTokenException("Unexpected token 'And' at position '21');
+	// Throws UnexpectedTokenException("Unexpected token 'And' at position '21')
+	var matcher = BooleanTextSearchFactory.New(query); 
+
+Incomplete expression:
+
+	var query = "('foo' AND 'bar') OR";
+
+	// Throws IncompleteExpressionException()
+	var matcher = BooleanTextSearchFactory.New(query); 	
 
 
 Syntax
