@@ -20,7 +20,7 @@ namespace Examples
 
         static void ValidExample()
         {
-            var query = "('foo' AND 'bar') OR NOT 'baz'";
+            var query = @"('foo' AND 'ba\'r') OR NOT 'baz'";
 
             var matcher = BooleanTextSearchFactory.New(query);
 
@@ -30,8 +30,10 @@ namespace Examples
             Console.WriteLine(matcher("test tost tast tust baz tist"));
             // False
             Console.WriteLine(matcher("test foo tost tast tust baz tist"));
-            // True
+            // False
             Console.WriteLine(matcher("test bar tost tast tust baz foo tist"));
+            // True
+            Console.WriteLine(matcher("test ba'r tost tast tust baz foo tist"));
         }
 
         static void InvalidCharactersExample()
