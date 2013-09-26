@@ -9,45 +9,45 @@ Examples
 
 A simple query:
 
-	var query = "('foo' AND 'bar') OR ('baz' AND 'qux')";
+	var query = "('foo' AND 'bar') OR NOT 'baz'";
 
-	var matcher = BooleanTextSearchFactory.New(query);
+    var matcher = BooleanTextSearchFactory.New(query);
 
-	// False
-	Console.WriteLine(matcher("test tost tast tust tist")); 
-	// False
-	Console.WriteLine(matcher("test tost tast foo tust tist"));
-	// True
-	Console.WriteLine(matcher("test bartost tast foo tist")); 
-	// True
-	Console.WriteLine(matcher("test tostbaz tast foo tustqux tist")); 
+    // True
+    Console.WriteLine(matcher("test tost tast tust tist"));
+    // False
+    Console.WriteLine(matcher("test tost tast tust baz tist"));
+    // False
+    Console.WriteLine(matcher("test foo tost tast tust baz tist"));
+    // True
+    Console.WriteLine(matcher("test bar tost tast tust baz foo tist"));
 
-Invalid chracters:
+Invalid characters:
 
-	var query = "('foo' fail AND 'bar') OR ('baz' AND 'qux')";
+	var query = "('foo' AND error 'bar') OR NOT 'baz'";
 
-	// Throws UnexpectedCharacterException("Unexpected character 'f' at position '7'")
-	var matcher = BooleanTextSearchFactory.New(query); 
+    // Throws UnexpectedCharacterException("Unexpected character 'e' at position '11'")
+    var matcher = BooleanTextSearchFactory.New(query); 
 
 Invalid syntax:
 
-	var query = "('foo' AND 'bar') OR AND ('baz' AND 'qux')";
+	var query = "('foo' AND 'bar') OR AND NOT 'baz'";
 
-	// Throws UnexpectedTokenException("Unexpected token 'And' at position '21')
-	var matcher = BooleanTextSearchFactory.New(query); 
+    // Throws UnexpectedTokenException("Unexpected token 'And' at position '21'")
+    var matcher = BooleanTextSearchFactory.New(query);
 
 Incomplete expression:
 
 	var query = "('foo' AND 'bar') OR";
 
-	// Throws IncompleteExpressionException()
-	var matcher = BooleanTextSearchFactory.New(query); 	
+    // Throws IncompleteExpressionException()
+    var matcher = BooleanTextSearchFactory.New(query);
 
 
 Syntax
 ------
 
-The used syntax is comparable with that of SQL. Currently only the AND and OR operators are implemented, literals are enclosed in single quotes and logical grouping is done with braces.
+The used syntax is comparable with that of SQL. Currently the boolean AND, OR and NOT operators are implemented. Literals are enclosed in single quotes and logical grouping is done with braces.
 
 
 Implementation
