@@ -10,16 +10,52 @@ namespace Examples
     {
         static void Main(string[] args)
         {
+            ValidExample();
+            // InvalidCharactersExample();
+            // InvalidTokensExample();
+            // IncompleteExpressionExample();
+            
+            Console.ReadKey();
+        }
+
+        static void ValidExample()
+        {
             var query = "('foo' AND 'bar') OR ('baz' AND 'qux')";
 
             var matcher = BooleanTextSearchFactory.New(query);
 
-            Console.WriteLine(matcher("test riktost tast tust tist")); // False
-            Console.WriteLine(matcher("test teost tast foo tust tist")); // False
-            Console.WriteLine(matcher("test bartost tast foo tist")); // True
+            // False
+            Console.WriteLine(matcher("test footost tast tust tist"));
+            // False
+            Console.WriteLine(matcher("test tost tast qux tust tist"));
+            // True
+            Console.WriteLine(matcher("test bartost tast foo tist"));
+            // True
             Console.WriteLine(matcher("test tostbaz tast foo tustqux tist")); // True
+        }
 
-            Console.ReadKey();
+        static void InvalidCharactersExample()
+        {
+            var query = "('foo' AND error 'bar') OR ('baz' AND 'qux')";
+
+            // Throws UnexpectedCharacterException("Unexpected character 'e' at position '11'")
+            var matcher = BooleanTextSearchFactory.New(query); 
+        }
+
+        static void InvalidTokensExample()
+        {
+            var query = "('foo' AND 'bar') OR AND ('baz' AND 'qux')";
+
+            // Throws UnexpectedTokenException("Unexpected token 'And' at position '21'")
+            var matcher = BooleanTextSearchFactory.New(query);
+        }
+
+        static void IncompleteExpressionExample()
+        {
+            var query = "('foo' AND 'bar') OR";
+
+            // Throws IncompleteExpressionException()
+            var matcher = BooleanTextSearchFactory.New(query);
         }
     }
 }
