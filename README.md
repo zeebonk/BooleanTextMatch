@@ -53,6 +53,6 @@ The used syntax is comparable with that of SQL. Currently the boolean AND, OR an
 Implementation
 --------------
 
-The interpreter is implemented as a simple LR parser and gets fed by a simple lexer, which converts the raw input string into tokens.
+The interpreter is implemented as a simple LR parser and gets fed by a basic lexer, which converts the raw input string into tokens.
 
-The parser, based on the reduction rules, converts the tokens into a LINQ expressions tree. When parsing is done, the GetExpression method can be used to compile the LINQ expression tree and return it as a Func<string, bool>.
+The parser, based on the reduction rules, reduces the tokens into a LINQ expressions tree. When parsing is done, the GetCompiledExpression method can be used to compile the LINQ expression tree and return it as a 'Func<string, bool>'.
