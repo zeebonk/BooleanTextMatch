@@ -26,6 +26,11 @@ namespace BooleanTextSearch.Interpretation
                 (tokens) => Expression.Or(tokens[0].Expression, tokens[2].Expression)
             ),
             new ParseRule(
+                new[] { TokenType.Not, TokenType.Result },
+                TokenType.Result,
+                (tokens) => Expression.Not(tokens[1].Expression)
+            ),
+            new ParseRule(
                 new[] { TokenType.OpenBrace, TokenType.Result, TokenType.CloseBrace }, 
                 TokenType.Result,
                 (tokens) => tokens[1].Expression

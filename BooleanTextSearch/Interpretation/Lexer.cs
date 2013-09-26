@@ -14,6 +14,7 @@ namespace BooleanTextSearch.Interpretation
             new LexRule(@"^\)", TokenType.CloseBrace),
             new LexRule(@"^AND", TokenType.And),
             new LexRule(@"^OR", TokenType.Or),
+            new LexRule(@"^NOT", TokenType.Not),
             new LexRule(@"^'([^']+)'", TokenType.Literal),
             new LexRule(@"^[\r\t\n ]+", TokenType.Whitespace),
         };

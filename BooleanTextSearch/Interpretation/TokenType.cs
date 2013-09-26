@@ -14,5 +14,6 @@ namespace BooleanTextSearch.Interpretation
         Literal,
         Whitespace,
         Result,
+        Not,
     }
 }
