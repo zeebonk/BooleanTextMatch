@@ -16,7 +16,7 @@ namespace BooleanTextSearch
             foreach (var token in lexer.GetTokens(query))
                 parser.Parse(token);
 
-            return parser.GetExpression();
+            return parser.GetCompiledExpression();
         }
     }
 }

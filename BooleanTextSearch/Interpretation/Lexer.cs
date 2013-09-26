@@ -28,7 +28,7 @@ namespace BooleanTextSearch.Interpretation
 
                 // When the result is null, no rule has matched and the characters are therefore unexpected
                 if (result == null)
-                    throw new UnexpectedCharactersException(currentCharacterIndex);
+                    throw new UnexpectedCharacterException(query[0], currentCharacterIndex);
 
                 // Unpack tuple for readability
                 var matchResult = result.Item1;

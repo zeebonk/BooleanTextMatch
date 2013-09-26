@@ -44,11 +44,12 @@
     <Compile Include="Interpretation\Exceptions\UnexpectedTokenException.cs" />
     <Compile Include="Interpretation\Lexer.cs" />
     <Compile Include="Interpretation\LexRule.cs" />
+    <Compile Include="Interpretation\Exceptions\IncompleteExpressionException.cs" />
     <Compile Include="Interpretation\Parser.cs" />
     <Compile Include="Interpretation\ParseRule.cs" />
     <Compile Include="Interpretation\Token.cs" />
     <Compile Include="Interpretation\TokenType.cs" />
-    <Compile Include="Interpretation\Exceptions\UnexpectedCharactersException.cs" />
+    <Compile Include="Interpretation\Exceptions\UnexpectedCharacterException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -109,8 +109,11 @@ namespace BooleanTextSearch.Interpretation
             return maxOverlap;
         }
 
-        public Func<string, bool> GetExpression()
+        public Func<string, bool> GetCompiledExpression()
         {
+            if (TokenStack.Count != 1 || TokenStack.Peek().Type != TokenType.Result)
+                throw new IncompleteExpressionException();
+
             var lambda = Expression.Lambda<Func<string, bool>>(
                 TokenStack.Peek().Expression,
                 InputParameter
