@@ -41,16 +41,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BooleanTextSearchFactory.cs" />
-    <Compile Include="Interpretation\Exceptions\UnexpectedTokenException.cs" />
-    <Compile Include="Interpretation\Lexer.cs" />
-    <Compile Include="Interpretation\LexRule.cs" />
-    <Compile Include="Interpretation\Exceptions\IncompleteExpressionException.cs" />
-    <Compile Include="Interpretation\Parser.cs" />
-    <Compile Include="Interpretation\ParseRule.cs" />
-    <Compile Include="Interpretation\Token.cs" />
-    <Compile Include="Interpretation\TokenType.cs" />
-    <Compile Include="Interpretation\Exceptions\UnexpectedCharacterException.cs" />
+    <Compile Include="Interpreter\Exceptions\UnexpectedTokenException.cs" />
+    <Compile Include="Interpreter\Lexer.cs" />
+    <Compile Include="Interpreter\LexRule.cs" />
+    <Compile Include="Interpreter\Exceptions\IncompleteExpressionException.cs" />
+    <Compile Include="Interpreter\Parser.cs" />
+    <Compile Include="Interpreter\ParseRule.cs" />
+    <Compile Include="Interpreter\Token.cs" />
+    <Compile Include="Interpreter\Exceptions\UnexpectedCharacterException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TokenType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

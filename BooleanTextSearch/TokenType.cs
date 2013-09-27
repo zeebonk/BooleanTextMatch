@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BooleanTextSearch.Interpretation
+namespace BooleanTextSearch
 {
-    public enum TokenType
+    internal enum TokenType
     {
         OpenBrace,
         CloseBrace,

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BooleanTextSearch.Interpretation.Exceptions
+namespace BooleanTextSearch.Interpreter.Exceptions
 {
     public class UnexpectedCharacterException : Exception
     {

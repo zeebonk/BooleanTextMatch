@@ -3,23 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using BooleanTextSearch.Interpretation.Exceptions;
+using BooleanTextSearch.Interpreter.Exceptions;
 
-namespace BooleanTextSearch.Interpretation
+namespace BooleanTextSearch.Interpreter
 {
-    public class Lexer
-    {
-        public static readonly LexRule[] RULES = new[] {
-            new LexRule(@"^\(", TokenType.OpenBrace),
-            new LexRule(@"^\)", TokenType.CloseBrace),
-            new LexRule(@"^AND", TokenType.And),
-            new LexRule(@"^OR", TokenType.Or),
-            new LexRule(@"^NOT", TokenType.Not),
-            new LexRule(@"^'((?:[^'\\]|\\.)+)'", TokenType.Literal),
-            new LexRule(@"^[\r\t\n ]+", TokenType.Whitespace),
-        };
+    public class Lexer<T>
+    {      
+        public Lexer(IEnumerable<LexRule<T>> rules)
+        {
+            Rules = rules.ToArray();
+        }
 
-        public IEnumerable<Token> GetTokens(string query)
+        public IEnumerable<Token<T>> GetTokens(string query)
         {
             var currentCharacterIndex = 0;
 
@@ -35,7 +30,7 @@ namespace BooleanTextSearch.Interpretation
                 var matchResult = result.Item1;
                 var matchRule = result.Item2;
 
-                var token = new Token() { Type = matchRule.ResultType, Index = currentCharacterIndex };
+                var token = new Token<T>() { Type = matchRule.ResultType, Index = currentCharacterIndex };
                 if (matchResult.Groups.Count >= 2) // Groups[0] is the entire match, Groups[1] is the first real group
                     token.Value = matchResult.Groups[1].Value.Replace(@"\'", "'");
 
@@ -46,9 +41,9 @@ namespace BooleanTextSearch.Interpretation
             }
         }
 
-        private Tuple<Match, LexRule> GetFirstMatchingRuleAndResult(string query)
+        private Tuple<Match, LexRule<T>> GetFirstMatchingRuleAndResult(string query)
         {
-            foreach (var rule in RULES)
+            foreach (var rule in Rules)
             {
                 var match = rule.Regex.Match(query);
 
@@ -58,5 +53,7 @@ namespace BooleanTextSearch.Interpretation
 
             return null;
         }
+
+        private IEnumerable<LexRule<T>> Rules { get; set; }
     }
 }

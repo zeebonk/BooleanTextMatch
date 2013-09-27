@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 
-namespace BooleanTextSearch.Interpretation
+namespace BooleanTextSearch.Interpreter
 {
-    public class Token
+    public class Token<T>
     {
-        public TokenType Type { get; set; }
+        public T Type { get; set; }
         public string Value { get; set; }
         public Expression Expression { get; set; }
         public int Index { get; set; }
