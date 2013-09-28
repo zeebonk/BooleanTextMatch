@@ -14,15 +14,15 @@ Examples
 	var matcher = BooleanTextSearchFactory.New(query);
 
 	// True
-	Console.WriteLine(matcher("test tost tast tust tist"));
+	Console.WriteLine(matcher("test tost tast tust tist", StringComparison.Ordinal));
 	// False
-	Console.WriteLine(matcher("test tost tast tust baz tist"));
+	Console.WriteLine(matcher("test tost tast tust baz tist", StringComparison.Ordinal));
 	// False
-	Console.WriteLine(matcher("test foo tost tast tust baz tist"));
+	Console.WriteLine(matcher("test foo tost tast tust baz tist", StringComparison.Ordinal));
 	// False
-	Console.WriteLine(matcher("test bar tost tast tust baz foo tist"));
+	Console.WriteLine(matcher("test bar tost tast tust baz foo tist", StringComparison.Ordinal));
 	// True
-	Console.WriteLine(matcher("test ba'r tost tast tust baz foo tist"));
+	Console.WriteLine(matcher("test ba'r tost tast tust baz foo tist", StringComparison.Ordinal));
 
 ### Invalid characters
 
@@ -57,15 +57,14 @@ Implementation
 
 The interpreter is implemented as a simple LR parser and gets fed by a basic lexer, which converts the raw input string into tokens.
 
-The parser, based on the reduction rules, reduces the tokens into a LINQ expressions tree. When parsing is done, the GetCompiledExpression method can be used to compile the LINQ expression tree and return it as a `Func<string, bool>`.
+The parser, based on the reduction rules, reduces the tokens into a LINQ expressions tree. When parsing is done, the GetCompiledExpression method can be used to compile the LINQ expression tree and return it as a `Func<string, StringComparison, bool>`.
 
-The expression tree is a simple tree of boolean operators and `Contains()` calls. This means that for every literal in the expression a full text scan is done. When having a large amount of literals and/or a large text to search in, this could potentially (__untested!__) add up.
+The expression tree is a simple tree of boolean operators and `IndexOf()` calls. Every `IndexOf()` call can potentially cause a full text scan but by ordering the query to make the most of short-circuit evaluation it is posible to minimize the number of `IndexOf()` calls.
 
 
 Possible future features
 ------------------------
 
-* Flag for case-(in)sensitive comparing
-* A more optimized implementation like a single text scan instead of a `Contains()` calls per literal 
+* A more optimized implementation like a single text scan instead of a `IndexOf()` call per literal 
 * Support for regex like wildcards, for example: `.` for any character or `*` for any number of characters
 * An order operator, for example: `'literal a' BEFORE 'literal b'`
