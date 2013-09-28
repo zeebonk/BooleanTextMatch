@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BooleanTextSearch;
+using System.Diagnostics;
 
 namespace Examples
 {
@@ -25,15 +26,15 @@ namespace Examples
             var matcher = BooleanTextSearchFactory.New(query);
 
             // True
-            Console.WriteLine(matcher("test tost tast tust tist"));
+            Console.WriteLine(matcher("test tost tast tust tist", StringComparison.Ordinal));
             // False
-            Console.WriteLine(matcher("test tost tast tust baz tist"));
+            Console.WriteLine(matcher("test tost tast tust baz tist", StringComparison.Ordinal));
             // False
-            Console.WriteLine(matcher("test foo tost tast tust baz tist"));
+            Console.WriteLine(matcher("test foo tost tast tust baz tist", StringComparison.Ordinal));
             // False
-            Console.WriteLine(matcher("test bar tost tast tust baz foo tist"));
+            Console.WriteLine(matcher("test bar tost tast tust baz foo tist", StringComparison.Ordinal));
             // True
-            Console.WriteLine(matcher("test ba'r tost tast tust baz foo tist"));
+            Console.WriteLine(matcher("test ba'r tost tast tust baz foo tist", StringComparison.Ordinal));
         }
 
         static void InvalidCharactersExample()
