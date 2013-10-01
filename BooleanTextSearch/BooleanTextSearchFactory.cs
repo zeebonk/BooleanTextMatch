@@ -27,25 +27,29 @@ namespace BooleanTextSearch
                 new[] { TokenType.Whitespace }
             ),
             ParseRuleFactory.NewNormal(
-                new[] { TokenType.Literal }, 
-                TokenType.Result,
-                (tokens) => Expression.GreaterThan(
-                    Expression.Call(INPUT_PARAMETER, typeof(string).GetMethod("IndexOf", new [] { typeof(string), typeof(StringComparison) }), Expression.Constant(tokens[0].Value), STRING_COMPARISON_PARAMETER), 
-                    Expression.Constant(-1, typeof(int))
-                )
+                new [] { TokenType.Literal },
+                TokenType.LiteralIndex,
+                (tokens) => Expression.Call(INPUT_PARAMETER, typeof(string).GetMethod("IndexOf", new [] { typeof(string), typeof(StringComparison) }), Expression.Constant(tokens[0].Value), STRING_COMPARISON_PARAMETER)
             ),
             ParseRuleFactory.NewNormal(
-                new[] { TokenType.Result, TokenType.And, TokenType.Result }, 
+                new[] { TokenType.LiteralIndex }, 
                 TokenType.Result,
-                (tokens) => Expression.And(
-                    tokens[0].Expression, 
-                    tokens[2].Expression
-                )
+                (tokens) => Expression.GreaterThan(tokens[0].Expression, Expression.Constant(-1, typeof(int)))
             ),
             ParseRuleFactory.NewNormal(
-                new[] { TokenType.Result, TokenType.Or, TokenType.Result }, 
+                new[] { TokenType.Or }, 
+                TokenType.BinaryOperator,
+                (tokens) => Expression.Or(Expression.Constant(false), Expression.Constant(false))
+            ),
+            ParseRuleFactory.NewNormal(
+                new[] { TokenType.And }, 
+                TokenType.BinaryOperator,
+                (tokens) => Expression.And(Expression.Constant(false), Expression.Constant(false))
+            ),
+            ParseRuleFactory.NewNormal(
+                new[] { TokenType.Result, TokenType.BinaryOperator, TokenType.Result }, 
                 TokenType.Result,
-                (tokens) => Expression.Or(tokens[0].Expression, tokens[2].Expression)
+                (tokens) => ((BinaryExpression)tokens[1].Expression).Update(tokens[0].Expression, ((BinaryExpression)tokens[1].Expression).Conversion, tokens[2].Expression)
             ),
             ParseRuleFactory.NewNormal(
                 new[] { TokenType.Not, TokenType.Result },

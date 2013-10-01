@@ -15,5 +15,7 @@ namespace BooleanTextSearch
         Whitespace,
         Result,
         Not,
+        BinaryOperator,
+        LiteralIndex,
     }
 }
