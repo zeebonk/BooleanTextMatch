@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BooleanTextSearchFactory.cs" />
+    <Compile Include="TextMatcher.cs" />
     <Compile Include="Interpreter\Exceptions\UnexpectedTokenException.cs" />
     <Compile Include="Interpreter\Lexer.cs" />
     <Compile Include="Interpreter\LexRule.cs" />

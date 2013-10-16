@@ -7,11 +7,57 @@ using System.Linq.Expressions;
 
 namespace BooleanTextSearch
 {
-    public class BooleanTextSearchFactory
+    public class TextMatcher
     {
+        private Func<string, StringComparison, bool> CompiledMatchExpression { get; set; }
+        public string Query { get; private set; }
+        public StringComparison StringComparison { get; private set; }
+
+        // Private constructor, used by factory method New
+        private TextMatcher(Func<string, StringComparison, bool> compiledMatchExpression, StringComparison stringComparison)
+        {
+            CompiledMatchExpression = compiledMatchExpression;
+            StringComparison = stringComparison;
+        }
+
+        public bool Matches(string text)
+        {
+            return CompiledMatchExpression(text, StringComparison);
+        }
+
+        // Factory method
+        public static TextMatcher New(string query, StringComparison compareType)
+        {
+            var lexer = new Lexer<TokenType>(LEX_RULES);
+            var parser = new Parser<TokenType>(PARSE_RULES);
+
+            foreach (var token in lexer.GetTokens(query))
+                parser.Parse(token);
+
+            var expression = GetCompiledExpression(parser);
+
+            return new TextMatcher(expression, compareType);
+        }
+
+        // Expression builder
+        private static Func<string, StringComparison, bool> GetCompiledExpression(Parser<TokenType> parser)
+        {
+            var expression = parser.GetReducedExpression(TokenType.Result);
+
+            var lambda = Expression.Lambda<Func<string, StringComparison, bool>>(
+                expression,
+                INPUT_PARAMETER,
+                STRING_COMPARISON_PARAMETER
+            );
+
+            return lambda.Compile();
+        }
+
+        // Expression parameters
         private static readonly ParameterExpression INPUT_PARAMETER = Expression.Parameter(typeof(string), "value");
         private static readonly ParameterExpression STRING_COMPARISON_PARAMETER = Expression.Parameter(typeof(StringComparison), "comparisonType");
 
+        // Lex rules
         private static readonly LexRule<TokenType>[] LEX_RULES = new[] {
             LexRuleFactory.New(@"^\(", TokenType.OpenBrace),
             LexRuleFactory.New(@"^\)", TokenType.CloseBrace),
@@ -22,6 +68,7 @@ namespace BooleanTextSearch
             LexRuleFactory.New(@"^[\r\t\n ]+", TokenType.Whitespace),
         };
 
+        // Parse rules
         private static readonly ParseRule<TokenType>[] PARSE_RULES = new[] {
             ParseRuleFactory.NewSkip(
                 new[] { TokenType.Whitespace }
@@ -63,28 +110,5 @@ namespace BooleanTextSearch
             ),
         };
 
-        public static Func<string, StringComparison, bool> New(string query)
-        {
-            var lexer = new Lexer<TokenType>(LEX_RULES);
-            var parser = new Parser<TokenType>(PARSE_RULES);
-
-            foreach (var token in lexer.GetTokens(query))
-                parser.Parse(token);
-
-            return GetCompiledExpression(parser);
-        }
-
-        private static Func<string, StringComparison, bool> GetCompiledExpression(Parser<TokenType> parser)
-        {
-            var expression = parser.GetReducedExpression(TokenType.Result);
-            
-            var lambda = Expression.Lambda<Func<string, StringComparison, bool>>(
-                expression,
-                INPUT_PARAMETER,
-                STRING_COMPARISON_PARAMETER
-            );
-
-            return lambda.Compile();
-        }
     }
 }
