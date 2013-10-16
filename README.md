@@ -11,39 +11,39 @@ Examples
 
 	var query = @"('foo' AND 'ba\'r') OR NOT 'baz'";
 
-	var matcher = BooleanTextSearchFactory.New(query);
-
-	// True
-	Console.WriteLine(matcher("test tost tast tust tist", StringComparison.Ordinal));
-	// False
-	Console.WriteLine(matcher("test tost tast tust baz tist", StringComparison.Ordinal));
-	// False
-	Console.WriteLine(matcher("test foo tost tast tust baz tist", StringComparison.Ordinal));
-	// False
-	Console.WriteLine(matcher("test bar tost tast tust baz foo tist", StringComparison.Ordinal));
-	// True
-	Console.WriteLine(matcher("test ba'r tost tast tust baz foo tist", StringComparison.Ordinal));
+    var matcher = TextMatcher.New(query, StringComparison.Ordinal);
+            
+    // True
+    Console.WriteLine(matcher.Matches("test tost tast tust tist"));
+    // False
+    Console.WriteLine(matcher.Matches("test tost tast tust baz tist"));
+    // False
+    Console.WriteLine(matcher.Matches("test foo tost tast tust baz tist"));
+    // False
+    Console.WriteLine(matcher.Matches("test bar tost tast tust baz foo tist"));
+    // True
+    Console.WriteLine(matcher.Matches("test ba'r tost tast tust baz foo tist"));
 
 ### Invalid characters
 
 	var query = "('foo' AND error 'bar') OR NOT 'baz'";
 
     // Throws UnexpectedCharacterException("Unexpected character 'e' at position '11'")
-    var matcher = BooleanTextSearchFactory.New(query); 
+    var matcher = TextMatcher.New(query, StringComparison.Ordinal);
 
 ### Invalid syntax
 
 	var query = "('foo' AND 'bar') OR AND NOT 'baz'";
 
     // Throws UnexpectedTokenException("Unexpected token 'And' at position '21'")
-    var matcher = BooleanTextSearchFactory.New(query);
+    var matcher = TextMatcher.New(query, StringComparison.Ordinal);
 
 ### Incomplete expression
 
 	var query = "('foo' AND 'bar') OR";
 
     // Throws IncompleteExpressionException()
-    var matcher = BooleanTextSearchFactory.New(query);
+    var matcher = TextMatcher.New(query, StringComparison.Ordinal);
 
 
 Syntax
