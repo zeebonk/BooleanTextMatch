@@ -1,7 +1,7 @@
-BooleanTextSearch
+BooleanTextMatch
 =================
 
-A .NET library for text searching/matching using a SQL like syntax with boolean operators.
+A .NET library for text matching using a SQL like syntax with boolean operators.
 
 
 Examples
